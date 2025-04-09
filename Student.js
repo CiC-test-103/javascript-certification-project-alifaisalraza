@@ -86,6 +86,17 @@ class Student {
   setSpecialization(newSpecialization) {
     this.#specialization = newSpecialization;
   }
+
+  // Custom serialization logic
+  toJSON() {
+    return {
+      name: this.getName(), 
+      year: this.getYear(),
+      email: this.getEmail(), 
+      specialization: this.getSpecialization()
+    };
+  }
+  
 }
 
 module.exports = { Student }

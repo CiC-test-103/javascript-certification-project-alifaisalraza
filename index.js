@@ -47,7 +47,19 @@ async function handleCommand(command) {
         console.log('Adding student...')
         const [name, year, email, specialization] = args
         // --------> WRITE YOUR CODE BELOW
+        if (name && year && email && specialization) {
+          try {
+            const newStudent = new Student(name, year, email, specialization);
+            studentManagementSystem.addStudent(newStudent);
+            console.log(`Updated List: ${studentManagementSystem.displayStudents()}`);
+          } catch (err) {
+            console.error(err.message);
+          }
+        } else {
+          console.log("missing mandatory fields; please enter student name, year, email and specialization.");
+        }
 
+        
         // --------> WRITE YOUR CODE ABOVE
         break;
 
@@ -62,7 +74,17 @@ async function handleCommand(command) {
        */
       console.log('Removing student...')
       // --------> WRITE YOUR CODE BELOW
-      
+      const [removeEmail] = args;
+      if (removeEmail) {
+        try {
+        studentManagementSystem.removeStudent(removeEmail);
+        console.log(`Updated List: ${studentManagementSystem.displayStudents()}`);
+        } catch (err) {
+        console.error(err.message);
+        }
+      } else {
+        console.log("email is mandatory. please enter student email.");
+      }      
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -75,7 +97,11 @@ async function handleCommand(command) {
        */
       console.log('Displaying students...')
       // --------> WRITE YOUR CODE BELOW
-
+      try {
+        console.log(`Updated List: ${studentManagementSystem.displayStudents()}`);
+      } catch (err) {
+        console.error (err.message);
+      }
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -91,7 +117,21 @@ async function handleCommand(command) {
        */
       console.log('Finding student...')
       // --------> WRITE YOUR CODE BELOW
-      
+      const [findEmail] = args;
+      if (findEmail) {
+        try {
+          const studentFound = studentManagementSystem.findStudent(findEmail);
+          if (studentFound === -1) {
+            console.log("There are no records for provided email; please provide a valid email.");
+          } else {
+            console.log(`${studentFound.getString()}`);
+          }
+        } catch (err) {
+          console.error (err.message);
+        }
+      } else {
+        console.log("email is mandatory. please enter student email.");
+      }
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -106,7 +146,19 @@ async function handleCommand(command) {
        */
       console.log('Saving data...')
       // --------> WRITE YOUR CODE BELOW
-
+      const [saveFileName] = args;
+      if (saveFileName) {
+        try {
+          await studentManagementSystem.saveToJson(saveFileName);
+          console.log (`file ${saveFileName} created successfully`);
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+      else {
+        console.log("file Name is mandatory. please enter file name.");
+      }
+      break;
       // --------> WRITE YOUR CODE ABOVE
 
     case "load":
@@ -120,7 +172,18 @@ async function handleCommand(command) {
        */
       console.log('Loading data...')
       // --------> WRITE YOUR CODE BELOW
-
+      const [loadFileName] = args
+      if (loadFileName) {
+        studentManagementSystem.clearStudents();
+        try { 
+          await studentManagementSystem.loadFromJSON(loadFileName);
+          console.log(`data loaded successfully; updated List: ${studentManagementSystem.displayStudents()}`);
+        } catch (err) {
+          console.error(`${err.message};Please rectify the error and try again`);
+        }
+      } else {
+        console.log("file Name is mandatory. please enter file name.");
+      }
       // --------> WRITE YOUR CODE ABOVE
       break;
 
@@ -134,6 +197,12 @@ async function handleCommand(command) {
        */
       console.log('Clearing data...')
       // --------> WRITE YOUR CODE BELOW
+      studentManagementSystem.clearStudents();
+      try {
+        console.log(`${studentManagementSystem.displayStudents()}`);
+      } catch (err) {
+        console.error (err.message);
+      }
 
       // --------> WRITE YOUR CODE ABOVE
       break;
